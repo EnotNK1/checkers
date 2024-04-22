@@ -47,7 +47,7 @@ class UserServise:
             else:
                 return "A user with this email address has already been registered"
         else:
-            return "Password mismatch"
+            return "Password or Login mismatch"
 
 
 user_service: UserServise = UserServise()

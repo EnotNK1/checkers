@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 import smtplib
 from email.mime.text import MIMEText
 
+
 # Функция для генерации JWT токена
 def generate_token(user_id):
     # Установка срока действия токена (1 час)
@@ -12,6 +13,7 @@ def generate_token(user_id):
     token = jwt.encode({'user_id': str(user_id), 'exp': expiry}, 'secret_key', algorithm='HS256')
 
     return token
+
 
 # Функция для проверки JWT токена
 def verify_token(token):
@@ -25,6 +27,7 @@ def verify_token(token):
     except jwt.InvalidTokenError:
         # Обработка других недопустимых токенов
         return 'Invalid token'
+
 
 # Подключение к серверу SMTP для отправки электронных писем
 def send_email(receiver_email: str, subject: str, message: str):
