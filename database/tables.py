@@ -11,6 +11,7 @@ from typing import List
 class Base(DeclarativeBase):
     pass
 
+
 class Users(Base):
     __tablename__ = "users"
 
