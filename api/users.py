@@ -1,9 +1,6 @@
-import uuid
-
-from fastapi import APIRouter, Cookie
-from schemas.users import Creds, Reg
-from services.users import user_service
-from starlette.responses import JSONResponse, Response
+from fastapi import APIRouter
+from api_fuctions.users import *
+from starlette.responses import Response
 
 router = APIRouter()
 
@@ -13,7 +10,7 @@ router = APIRouter()
     response_model=None,
 )
 def register_user(data: Reg):
-    return user_service.register(data)
+    return register(data)
 
 
 @router.post(
@@ -21,4 +18,4 @@ def register_user(data: Reg):
     response_model=None,
 )
 def auth_user(data: Creds, response: Response):
-    return user_service.authorization(data, response)
+    return authorization(data, response)

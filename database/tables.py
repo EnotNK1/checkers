@@ -1,10 +1,5 @@
-import enum
 import uuid
-
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-import datetime
-
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from typing import List
 
 
@@ -19,3 +14,4 @@ class Users(Base):
     username: Mapped[str]
     email: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]
+    token: Mapped[str]

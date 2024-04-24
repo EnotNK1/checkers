@@ -1,7 +1,10 @@
-fastapi
-uvicorn
-sqlalchemy
-psycopg2
-pyjwt
+fastapi~=0.110.2
+uvicorn~=0.29.0
+sqlalchemy~=2.0.29
+psycopg2~=2.9.9
+pyjwt~=2.8.0
 alembic
 gunicorn
+starlette~=0.37.2
+pydantic~=2.7.0
+passlib~=1.7.4
