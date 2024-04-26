@@ -79,7 +79,9 @@ def authorization(creds_model: Creds, response: Response):
 
 
 def register(reg_model: Reg) -> str:
-    # TODO: Сделать проверку юзернейма пользователя. Одинаковых быть не должно
+    if username_exists_in_db(reg_model.username):
+        return "Username already taken"
+
     if reg_model.password == reg_model.confirm_password:
         if register_user_to_db(reg_model.username, reg_model.email, reg_model.password) == 0:
             return "Successfully"

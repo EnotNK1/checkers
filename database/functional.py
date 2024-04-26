@@ -1,7 +1,8 @@
 from psycopg2 import Error
 from sqlalchemy import create_engine, select
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from database.tables import Users, Base
+from fastapi import Depends
 
 engine = create_engine(url="sqlite:///./db.db", echo=False)
 # engine = create_engine(url="postgresql://user:password@db:5432/dbname", echo=False)
@@ -34,6 +35,18 @@ def register_user_to_db(username, email, password):
         except (Exception, Error) as error:
             print(error)
             return -1
+
+
+def get_user(username: str):
+    db = s()
+    user = db.query(Users).filter_by(username=username).first()
+    return user
+
+
+def username_exists_in_db(username: str) -> bool:
+    db = s()
+    user = db.query(Users).filter_by(username=username).first()
+    return user is not None
 
 
 def check_user(email, password):
