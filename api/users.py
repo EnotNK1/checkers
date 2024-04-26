@@ -1,21 +1,14 @@
 from fastapi import APIRouter
-from api_fuctions.users import *
-from starlette.responses import Response
+from api_fuctions.auth_and_reg_funcs import *
 
 router = APIRouter()
 
 
-@router.post(
-    "/users/reg",
-    response_model=None,
-)
+@router.post("/users/reg", response_model=None)
 def register_user(data: Reg):
     return register(data)
 
 
-@router.post(
-    "/users/auth",
-    response_model=None,
-)
+@router.post("/users/auth", response_model=None)
 def auth_user(data: Creds, response: Response):
     return authorization(data, response)

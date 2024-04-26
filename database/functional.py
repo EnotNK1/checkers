@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, joinedload
 from database.tables import Users, Base
 import uuid
 
-engine = create_engine(url="postgresql://postgres:postgresosikati@localhost:5432/tp", echo=False)
+engine = create_engine(url="postgresql://myuser:mypass@localhost:5432/db", echo=False)
 # engine = create_engine(url="postgresql://user:password@db:5432/dbname", echo=False)
 
 session_factory = sessionmaker(engine)
