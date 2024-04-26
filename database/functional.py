@@ -1,30 +1,35 @@
 from psycopg2 import Error
-from sqlalchemy import Integer, String, create_engine, select, func
-from sqlalchemy.orm import sessionmaker, joinedload
+from sqlalchemy import create_engine, select
+from sqlalchemy.orm import sessionmaker
 from database.tables import Users, Base
-import uuid
 
-engine = create_engine(url="postgresql://myuser:mypass@localhost:5432/db", echo=False)
+engine = create_engine(url="sqlite:///./db.db", echo=False)
 # engine = create_engine(url="postgresql://user:password@db:5432/dbname", echo=False)
 
-session_factory = sessionmaker(engine)
+s = sessionmaker(engine)
+
+
+def get_db():
+    db = s()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 def create_tables():
-    # Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
 
-def register_user(id, username, email, password):
-    with session_factory() as session:
+def register_user_to_db(username, email, password):
+    with s() as db:
         try:
-            user = Users(id=id,
-                         username=username,
+            user = Users(username=username,
                          email=email,
                          password=password
                          )
-            session.add(user)
-            session.commit()
+            db.add(user)
+            db.commit()
             return 0
         except (Exception, Error) as error:
             print(error)
@@ -32,7 +37,7 @@ def register_user(id, username, email, password):
 
 
 def check_user(email, password):
-    with session_factory() as session:
+    with s() as session:
         try:
             user = session.query(Users).filter_by(email=email).one()
             pas = user.password
@@ -48,7 +53,7 @@ def check_user(email, password):
 
 
 def check_role(id):
-    with session_factory() as session:
+    with s() as session:
         try:
             user = session.get(Users, id)
             role_id = user.role_id
@@ -67,7 +72,7 @@ def check_role(id):
 
 
 def get_id_user(email):
-    with session_factory() as session:
+    with s() as session:
         try:
             user = session.query(Users).filter_by(email=email).one()
             return user.id
@@ -78,7 +83,7 @@ def get_id_user(email):
 
 
 def get_password_user(email):
-    with session_factory() as session:
+    with s() as session:
         try:
             user = session.query(Users).filter_by(email=email).one()
             return user.password
@@ -89,7 +94,7 @@ def get_password_user(email):
 
 
 def get_all_users():
-    with session_factory() as session:
+    with s() as session:
         try:
             query = select(Users)
             result = session.execute(query)
@@ -111,6 +116,7 @@ def get_all_users():
             return -1
 
 
+create_tables()
 # database_service = DatabaseService()
 #
 # database_service.create_tables()

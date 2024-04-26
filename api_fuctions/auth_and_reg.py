@@ -69,49 +69,21 @@ def token_verify(token: str, db: Session) -> dict:
 #     else:
 #         return "access denied"
 
-def authorization(payload: Creds, response: Response):
-    if check_user(payload.email, payload.password) == 0:
-        user_id = get_id_user(payload.email)
-
+def authorization(creds_model: Creds, response: Response):
+    if check_user(creds_model.email, creds_model.password) == 0:
         token = generate_token()
-        response.set_cookie(key="access_token", value=token, httponly=True)
+        # response.set_cookie(key="access_token", value=token, httponly=True) # эта чё
         return token
     else:
-        return "error"
+        return "Invalid password or login"
 
 
 def register(reg_model: Reg) -> str:
-    """
-    Регистрирует нового пользователя, используя предоставленные данные.
-
-    Функция принимает на вход объект типа Reg, который должен содержать атрибуты:
-    - username: имя пользователя;
-    - email: электронная почта пользователя;
-    - password: пароль пользователя;
-    - confirm_password: подтверждение пароля.
-
-    Процесс регистрации включает следующие шаги:
-    1. Проверка совпадения пароля и его подтверждения.
-    2. Если пароли совпадают, генерируется уникальный UUID для пользователя,
-       и выполняется попытка зарегистрировать пользователя с помощью функции register_user.
-    3. Если регистрация прошла успешно (пользователь с таким же email отсутствует в системе),
-       функция возвращает сообщение "Successfully".
-    4. Если пользователь с таким email уже существует, возвращается сообщение
-       "A user with this email address has already been registered".
-
-    Ошибки в результате несовпадения паролей обрабатываются отправкой сообщения
-    "Password or Login mismatch".
-
-    Возвращает:
-    - строку с результатом выполнения функции регистрации.
-    """
+    # TODO: Сделать проверку юзернейма пользователя. Одинаковых быть не должно
     if reg_model.password == reg_model.confirm_password:
-        if register_user(uuid.uuid4(), reg_model.username, reg_model.email, reg_model.password) == 0:
+        if register_user_to_db(reg_model.username, reg_model.email, reg_model.password) == 0:
             return "Successfully"
         else:
             return "A user with this email address has already been registered"
     else:
         return "Password or Login mismatch"
-
-
-# user_service: UserServise = UserServise()

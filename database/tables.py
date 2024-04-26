@@ -1,6 +1,7 @@
 import uuid
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from typing import List
+from sqlalchemy import create_engine, Column, String, Integer, Boolean, ForeignKey
+# from sqlalchemy import UUID as PGUUID
 
 
 class Base(DeclarativeBase):
@@ -8,10 +9,10 @@ class Base(DeclarativeBase):
 
 
 class Users(Base):
-    __tablename__ = "users"
+    __tablename__ = 'users'
 
-    id: Mapped[uuid.UUID] = mapped_column(primary_key=True)
-    username: Mapped[str]
-    email: Mapped[str] = mapped_column(unique=True)
-    password: Mapped[str]
-    token: Mapped[str]
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    username = Column(String)
+    email = Column(String)
+    password = Column(String)
+    token = Column(String, default='')
