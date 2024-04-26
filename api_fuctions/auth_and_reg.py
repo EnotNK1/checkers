@@ -69,10 +69,14 @@ def token_verify(token: str, db: Session) -> dict:
 #     else:
 #         return "access denied"
 
-def authorization(creds_model: Creds, response: Response):
+def authorization(creds_model: Creds):
+    db = s()
     if check_user(creds_model.email, creds_model.password) == 0:
         token = generate_token()
-        # response.set_cookie(key="access_token", value=token, httponly=True) # эта чё
+        user = db.query(Users).filter_by(email=creds_model.email).first()
+        if user:
+            user.token = token
+            db.commit()
         return token
     else:
         return "Invalid password or login"

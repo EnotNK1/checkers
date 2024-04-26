@@ -10,5 +10,5 @@ def register_user(data: Reg):
 
 
 @router.post("/users/auth", response_model=None)
-def auth_user(data: Creds, response: Response):
-    return authorization(data, response)
+def auth_user(data: Creds):
+    return authorization(data)
