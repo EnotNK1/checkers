@@ -2,10 +2,8 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 import secrets
-from pydantic_models.users import Creds, Reg
+from pydantic_models.users import *
 from database.functional import *
-import uuid
-from starlette.responses import Response
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -35,22 +33,6 @@ def token_verify(token: str, db: Session) -> dict:
     return {"id": user.id, "username": user.username}
 
 
-# Подключение к серверу SMTP для отправки электронных писем
-# def send_email(receiver_email: str, subject: str, message: str):
-#     sender_email = "obsudim.7@mail.ru"
-#     password = "MySAWsLx6WkitzCanTay"
-# 
-#     msg = MIMEText(message)
-#     msg['Subject'] = subject
-#     msg['From'] = sender_email
-#     msg['To'] = receiver_email
-# 
-#     server = smtplib.SMTP_SSL('smtp.mail.ru', 465)
-#     server.login(sender_email, password)
-#     server.sendmail(sender_email, receiver_email, msg.as_string())
-#     server.quit()
-
-
 # def get_users(access_token) -> list or str:
 #     if not access_token:
 #         return "not token"
@@ -62,12 +44,6 @@ def token_verify(token: str, db: Session) -> dict:
 #         return "Invalid token"
 #
 #     role = check_role(uuid.UUID(token_data['user_id']))
-#
-#     if role == 0:
-#         items = get_all_users()
-#         return items
-#     else:
-#         return "access denied"
 
 def authorization(creds_model: Creds):
     db = s()
@@ -93,3 +69,37 @@ def register(reg_model: Reg) -> str:
             return "A user with this email address has already been registered"
     else:
         return "Password or Login mismatch"
+
+
+def get_userdata_from_token(token: str):
+    # Создаем сессию
+    session = s()
+    try:
+        # Ищем пользователя по токену
+        user = session.query(Users).filter(Users.token == token).first()
+        # Возвращаем данные пользователя, если он найден
+        if user is not None:
+            return {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'password': user.password  # Обычно пароль не возвращают!
+            }
+        else:
+            return None
+    finally:
+        session.close()
+
+
+def username_change(new_username: str, token: Token):
+    db = s()
+    user = db.query(Users).filter(Users.token == token.token).first()
+    if user:
+        if user.username != new_username:
+            user.username = new_username
+            db.commit()
+            return True  # Indicates successful change
+        else:
+            return True  # No change needed, but not an error
+    else:
+        return False  # Indicates user not found and no update was made

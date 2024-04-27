@@ -11,3 +11,7 @@ class Reg(pydantic.BaseModel):
     username: str
     password: str
     confirm_password: str
+
+
+class Token(pydantic.BaseModel):
+    token: str

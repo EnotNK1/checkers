@@ -1,7 +1,5 @@
-import uuid
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import create_engine, Column, String, Integer, Boolean, ForeignKey
-# from sqlalchemy import UUID as PGUUID
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy import create_engine, Column, String, Integer
 
 
 class Base(DeclarativeBase):
