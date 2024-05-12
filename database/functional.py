@@ -1,11 +1,9 @@
 from psycopg2 import Error
 from sqlalchemy import create_engine, select
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
 from database.tables import Users, Base
-from fastapi import Depends
 
 engine = create_engine(url="sqlite:///./db.db", echo=False)
-# engine = create_engine(url="postgresql://user:password@db:5432/dbname", echo=False)
 
 s = sessionmaker(engine)
 
