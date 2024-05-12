@@ -33,18 +33,6 @@ def token_verify(token: str, db: Session) -> dict:
     return {"id": user.id, "username": user.username}
 
 
-# def get_users(access_token) -> list or str:
-#     if not access_token:
-#         return "not token"
-#     token_data = token_verify(access_token)
-#
-#     if token_data == 'Token has expired':
-#         return "Token has expired"
-#     elif token_data == 'Invalid token':
-#         return "Invalid token"
-#
-#     role = check_role(uuid.UUID(token_data['user_id']))
-
 def authorization(creds_model: Creds):
     db = s()
     if check_user(creds_model.email, creds_model.password) == 0:
