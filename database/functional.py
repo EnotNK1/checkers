@@ -50,7 +50,7 @@ def username_exists_in_db(username: str) -> bool:
 def check_user(email, password):
     with s() as session:
         try:
-            user = session.query(Users).filter_by(email=email).one()
+            user = session.query(Users).filter_by(email=email).first()
             pas = user.password
 
             if pas == password:

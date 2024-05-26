@@ -41,7 +41,7 @@ def authorization(creds_model: Creds):
         if user:
             user.token = token
             db.commit()
-        return token
+        return "Successfully"
     else:
         return "Invalid password or login"
 
