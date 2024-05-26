@@ -1,15 +1,16 @@
 from fastapi import APIRouter
 from api_fuctions.user_funcs import *
 
-router = APIRouter(prefix="/user")
+
+router = APIRouter(prefix="/users")
 
 
-@router.post("/users/reg", response_model=None)
+@router.post("/reg", response_model=None)
 def register_user(data: Reg):
     return register(data)
 
 
-@router.post("/users/auth", response_model=None)
+@router.post("/auth", response_model=None)
 def auth_user(data: Creds):
     return authorization(data)
 
